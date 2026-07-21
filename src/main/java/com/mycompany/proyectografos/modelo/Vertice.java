@@ -1,23 +1,46 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.mycompany.proyectografos.modelo;
 
-public class Vertice {
-    private final String id;
+import java.util.Objects;
 
-    public Vertice(String id) {
+public class Vertice {
+    private int id;
+    private int x;
+    private int y;
+
+    public Vertice(int id) {
         this.id = id;
     }
 
-    public String getId() {
-        return id;
+    public Vertice(int id, int x, int y) {
+        this.id = id;
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
+
+    public int getX() { return x; }
+    public void setX(int x) { this.x = x; }
+
+    public int getY() { return y; }
+    public void setY(int y) { this.y = y; }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Vertice vertice = (Vertice) o;
+        return id == vertice.id;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 
     @Override
     public String toString() {
-        return "Vertice{id='" + id + "'}";
+        return "V" + id;
     }
-    
 }

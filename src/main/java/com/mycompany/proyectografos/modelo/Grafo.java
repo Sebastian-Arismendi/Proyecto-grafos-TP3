@@ -1,49 +1,61 @@
-
 package com.mycompany.proyectografos.modelo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Grafo {
-    private int numVertices;
-    private int numAristas; // <-- NUEVO: Para seguimiento de memoria
-    private int[][] matrizAdyacencia;
     private List<Vertice> vertices;
     private List<Arista> aristas;
 
-    public Grafo(int numVertices, int[][] matriz) {
-        this.numVertices = numVertices;
-        this.matrizAdyacencia = matriz;
+    // Constructor vacío (para cuando se empieza a dibujar desde cero)
+    public Grafo() {
         this.vertices = new ArrayList<>();
         this.aristas = new ArrayList<>();
-        this.numAristas = 0; // Inicializar en 0
-        
-        inicializarComponentes();
     }
 
-    private void inicializarComponentes() {
-        for (int i = 0; i < numVertices; i++) {
-            vertices.add(new Vertice(String.valueOf((char)('A' + i))));
+    // Constructor optimizado para grafos no dirigidos (evita bucles y duplicados)
+    public Grafo(int n, int[][] matriz) {
+        this();
+        for (int i = 0; i < n; i++) {
+            vertices.add(new Vertice(i));
         }
-
-        for (int i = 0; i < numVertices; i++) {
-            for (int j = 0; j < numVertices; j++) {
-                if (matrizAdyacencia[i][j] != 0) {
-                    aristas.add(new Arista(vertices.get(i), vertices.get(j), matrizAdyacencia[i][j]));
-                    numAristas++; // <-- Incrementamos el contador aquí
+        
+        // Recorremos solo la mitad superior de la matriz (j = i + 1)
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
+                if (matriz[i][j] != 0) {
+                    aristas.add(new Arista(vertices.get(i), vertices.get(j)));
                 }
             }
         }
     }
 
-    // Métodos de evaluación de memoria
-    public long calcularMemoriaMatrizAdyacencia() {
-        return (long) numVertices * numVertices * 4; 
+    public void agregarVertice(Vertice vertice) {
+        this.vertices.add(vertice);
     }
 
-    public long calcularMemoriaListaAdyacencia() {
-        // Estimación: 16 bytes overhead objeto + 8 bytes datos por arista
-        return (numVertices * 4) + (numAristas * 24); 
+    public void agregarArista(Arista arista) {
+        this.aristas.add(arista);
+    }
+    
+    public void eliminarVertice(Vertice v) {
+        if (v == null) return;
+        
+        // 1. Eliminar todas las aristas conectadas a este vértice
+        aristas.removeIf(a -> a.getOrigen().equals(v) || a.getDestino().equals(v));
+        
+        // 2. Eliminar el vértice
+        vertices.remove(v);
+        
+        // 3. Reorganizar las IDs (V0, V1, V2...) para que queden consecutivas
+        for (int i = 0; i < vertices.size(); i++) {
+            vertices.get(i).setId(i);
+        }
+    }
+
+    public void vaciar() {
+        vertices.clear();
+        aristas.clear();
     }
 
     public List<Vertice> getVertices() { return vertices; }

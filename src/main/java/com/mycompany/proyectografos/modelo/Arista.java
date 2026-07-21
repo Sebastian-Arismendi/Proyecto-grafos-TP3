@@ -1,24 +1,22 @@
-
 package com.mycompany.proyectografos.modelo;
 
 public class Arista {
-    private final Vertice origen;
-    private final Vertice destino;
-    private final int peso;
+    private Vertice origen;
+    private Vertice destino;
 
-    public Arista(Vertice origen, Vertice destino, int peso) {
+    public Arista(Vertice origen, Vertice destino) {
         this.origen = origen;
         this.destino = destino;
-        this.peso = peso;
     }
 
     public Vertice getOrigen() { return origen; }
+    public void setOrigen(Vertice origen) { this.origen = origen; }
+
     public Vertice getDestino() { return destino; }
-    public int getPeso() { return peso; }
+    public void setDestino(Vertice destino) { this.destino = destino; }
 
     @Override
     public String toString() {
-        return String.format("Arista[%s -> %s, peso=%d]", 
-            origen.getId(), destino.getId(), peso);
+        return "(" + origen + " -> " + destino + ")";
     }
 }
